@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getUser (@PathVariable("id") long id, Model model) {
+    public String getUser(@PathVariable("id") long id, Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "user";
     }
@@ -73,5 +73,15 @@ public class UserController {
             userService.updateUser(user);
             return "redirect:/";
         }
+    }
+
+    @GetMapping("/admin")
+    public String adminPage() {
+        return "admin";
+    }
+
+    @GetMapping("/userpage")
+    public String userPage() {
+        return "userpage";
     }
 }

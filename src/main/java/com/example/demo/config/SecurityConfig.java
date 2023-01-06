@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.security.SuccessUserHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +21,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+    private final SuccessUserHandler successUserHandler;
 
     @Autowired
-    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+    public SecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, SuccessUserHandler successUserHandler) {
         this.userDetailsService = userDetailsService;
+        this.successUserHandler = successUserHandler;
     }
 
 //    @Override
@@ -50,7 +53,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin()
+                .successHandler(successUserHandler)
+                .usernameParameter("username")
+                .passwordParameter("password")
+                // даем доступ к форме логина всем
+                .permitAll();
+
     }
 
     @Bean
