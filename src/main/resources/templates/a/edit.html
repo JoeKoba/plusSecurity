@@ -2,12 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New user</title>
+    <title>Edit user</title>
+
 </head>
 <body>
-<h1>Add user</h1>
-<form action="#" method="POST" th:action="@{/admin/new}" th:object="${user}">
+<h1>Edit user</h1>
+<form action="#" th:method="PATCH" th:action="@{/edit}" th:object="${user}">
     <table>
+        <tr>
+            <td>
+                <label for="userId">UserId</label>
+                <input readonly type="number" th:field="*{userId}" id="userId" placeholder="UserId">
+            </td>
+        </tr>
         <tr>
             <td>
                 <label for="name">Enter name</label>
@@ -22,7 +29,7 @@
                 <div th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">surname error</div>
             </td>
         </tr>
-            <br>
+        <br>
         <tr>
             <td>
                 <label for="age">Enter age</label>
@@ -30,7 +37,7 @@
                 <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age error</div>
             </td>
         </tr>
-            <br>
+        <br>
         <tr>
             <td>
                 <label for="email">Enter email</label>
@@ -38,10 +45,10 @@
                 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</div>
             </td>
         </tr>
-            <br>
+        <br>
         <tr>
             <td>
-                <input type="submit" class="buttonAdd" value="Add user"/>
+                <input type="submit" class="buttonEdit" value="Edit user"/>
             </td>
         </tr>
     </table>

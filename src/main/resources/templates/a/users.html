@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Users</h1>
-<button onclick="window.location.href = '/admin/new';">Add new user</button>
+
 <br>
 <br>
 <table border="1">
@@ -18,16 +18,7 @@
         <td th:utext="${users.surname}">Surname</td>
         <td th:utext="${users.age}">Age</td>
         <td th:utext="${users.email}">Email</td>
-        <td>
-            <form th:action="@{'edit/' + ${users.userId}}">
-                <input type="submit" class="buttonEdit" value="Edit"/>
-            </form>
-        </td>
-        <td>
-            <form th:method="DELETE" th:action="@{'delete/' + ${users.userId}}">
-                <input type="submit" class="buttonDelete" value="Delete"/>
-            </form>
-        </td>
+
     </tr>
 </table>
 </body>

@@ -4,14 +4,16 @@ import com.example.demo.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Component
 @Transactional
 public class UserDaoImpl implements UserDAO {
+
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -22,12 +24,12 @@ public class UserDaoImpl implements UserDAO {
 
     @Override
     public User getUserById(long id) {
-     return entityManager.find(User.class,id);
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public void addUser(User user) {
-       entityManager.persist(user);
+        entityManager.persist(user);
     }
 
     @Override
@@ -39,4 +41,13 @@ public class UserDaoImpl implements UserDAO {
     public void updateUser(User user) {
         entityManager.merge(user);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        TypedQuery<User> q = (entityManager.createQuery("select u from User u " +
+                "where u.email = :email", User.class));
+        q.setParameter("email", email);
+        return q.getResultList().stream().findFirst().orElse(null);
+    }
+
 }

@@ -4,24 +4,20 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.security.Principal;
 
-@Controller
-public class UserController {
+@org.springframework.stereotype.Controller
+public class MyController {
 
     private final UserService userService;
 
     @Autowired()
-    public UserController(UserService userService) {
+    public MyController(UserService userService) {
         this.userService = userService;
     }
 
@@ -37,7 +33,7 @@ public class UserController {
         return "user";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/admin/new")
     @PreAuthorize("hasAuthority('developers:write')")
     public String addUser(User user) {
         return "create";
@@ -54,12 +50,14 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public String delete(@PathVariable("id") long id) {
         userService.removeUser(id);
         return "redirect:/";
     }
 
     @GetMapping("edit/{id}")
+    @PreAuthorize("hasAuthority('developers:write')")
     public String updateUser(@PathVariable("id") long id, Model model) {
         model.addAttribute(userService.getUserById(id));
         return "edit";
@@ -76,12 +74,14 @@ public class UserController {
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('developers:write')")
     public String adminPage() {
         return "admin";
     }
 
-    @GetMapping("/userpage")
-    public String userPage() {
-        return "userpage";
+    @GetMapping("/user")
+    public String userPage(Model model, Principal principal){
+        model.addAttribute("user", userService.getUserByEmail(principal.getName()));
+        return "user";
     }
 }
